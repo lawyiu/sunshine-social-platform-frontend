@@ -3,7 +3,7 @@ import React from "react";
 import sun from "./sun.svg";
 import cloud from "./cloud.svg";
 
-const URL = "https://posts-worker.lawcyiu.workers.dev";
+const POSTS_API_URL = process.env.REACT_APP_POSTS_API_URL;
 
 class Post extends React.Component {
   render() {
@@ -48,7 +48,7 @@ class Posts extends React.Component {
   }
 
   loadPosts() {
-    fetch(URL + "/posts")
+    fetch(POSTS_API_URL + "/posts")
       .then((result) => result.json())
       .then(
         (result) => {
@@ -139,7 +139,7 @@ class PostForm extends React.Component {
 
     this.setState({ errorMsg: "" });
 
-    fetch(URL + "/posts", {
+    fetch(POSTS_API_URL + "/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
