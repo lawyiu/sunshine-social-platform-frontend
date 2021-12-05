@@ -133,43 +133,50 @@ class PostForm extends React.Component {
       username: this.state.username,
       title: this.state.title,
       content: this.state.content,
+      captcha: window.grecaptcha.getResponse(),
     };
 
-    const postData = JSON.stringify(formData);
+    if (formData.captcha === "") {
+      this.setState({ errorMsg: "Captcha not checked or solved" });
+    } else {
+      const postData = JSON.stringify(formData);
 
-    this.setState({ errorMsg: "" });
+      this.setState({ errorMsg: "" });
 
-    fetch(POSTS_API_URL + "/posts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: postData,
-    })
-      .then((resp) => {
-        switch (resp.status) {
-          case 200:
-            this.hideForm();
-            this.clearForm();
-
-            if (this.onSubmitSuccessCallback) {
-              this.onSubmitSuccessCallback(formData);
-            }
-
-            break;
-
-          case 400:
-            resp.text().then((respErrMsg) => {
-              this.setState({ errorMsg: "Error sending post: " + respErrMsg });
-            });
-            break;
-
-          default:
-        }
+      fetch(POSTS_API_URL + "/posts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: postData,
       })
-      .catch((error) =>
-        this.setState({ errorMsg: "Error sending post: " + error })
-      );
+        .then((resp) => {
+          switch (resp.status) {
+            case 200:
+              this.hideForm();
+              this.clearForm();
+
+              if (this.onSubmitSuccessCallback) {
+                this.onSubmitSuccessCallback(formData);
+              }
+
+              break;
+
+            case 400:
+              resp.text().then((respErrMsg) => {
+                this.setState({
+                  errorMsg: "Error sending post: " + respErrMsg,
+                });
+              });
+              break;
+
+            default:
+          }
+        })
+        .catch((error) =>
+          this.setState({ errorMsg: "Error sending post: " + error })
+        );
+    }
 
     event.preventDefault();
   }
@@ -276,6 +283,8 @@ class PostForm extends React.Component {
               <p className="text-red-700 mb-4">{this.state.errorMsg}</p>
             )}
 
+            <div id="g-recaptcha" className="flex justify-center"></div>
+
             <div className="flex items-center justify-between">
               <button
                 className="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded"
@@ -294,6 +303,14 @@ class PostForm extends React.Component {
           </form>
         </div>
       );
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.opened && prevState.opened !== this.state.opened) {
+      window.grecaptcha.render("g-recaptcha", {
+        sitekey: process.env.REACT_APP_CAPTCHA_KEY,
+      });
     }
   }
 }
