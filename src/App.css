@@ -1,0 +1,76 @@
+.App {
+  text-align: center;
+  background-color: #3B7EA1;
+}
+
+.App-logo {
+  height: 8vmin;
+  pointer-events: none;
+  display: inline;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo-spin {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  position: relative;
+  background-color: #003262;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-footer {
+  position: relative;
+  bottom: 0;
+  background-color: #104911;
+  width: 100%;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  z-index: 1;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.Container {
+  min-height: 80vh;
+}
+
+.Cloud {
+  position: fixed;
+  height: 10vh;
+  z-index: 0;
+}
+
+.Posts-container {
+  position: relative;
+  z-index: 1;
+}
+
+.Post-Form {
+  position: relative;
+  z-index: 1;
+}
